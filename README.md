@@ -1,8 +1,14 @@
-# NOTE: Vibecoded using abacus.ai !!!
+# NOTE: !!! The code in this repo has been vibecoded using abacus.ai !!!
 
-# UBOM - Universal Business Object Model
+# uBOM - micro Product Lifecycle Management
 
-A comprehensive Product Lifecycle Management (PLM) system implementation in Go following the UBOM specification. This system provides a robust, scalable, and maintainable solution for managing complex business processes across the entire product lifecycle.
+## Purpose
+
+Provide a configurable platform for hardare manufacturers that encapsulates PLM processes. Provides a robust engine for quality and change management.
+
+Scope: provide a web interface, serve <= 100 users simultaneously, provide low latency access to <=250 million DB records, provide appropriate CRUD UIs for workflow, change management, parts, sequences, and others as required.
+
+A highly configurable Product Lifecycle Management (PLM) system implementation in Go. This system provides a robust, scalable, and maintainable solution for managing complex business processes across the entire product lifecycle with a focus on hardware manufacturing.
 
 ## Project Structure
 
@@ -39,12 +45,18 @@ The workflow engine is fully implemented with a 3-layer architecture:
 - **Layer 1**: Compositional services (StateMachine, WorkExecution, ConditionEvaluation)
 - **Layer 2**: Operational framework (RuntimeEngine, Persistence, ErrorHandling)
 
-### 🚧 Planned Components
-- Quality Management System
-- Change Management System
-- CRUD Interface Layer
-- Document Management System
+### 🚧 PLM Workflow Extensions
+
+- Quality Management System: a reference implementation using the workflow engine
+- Change Management System: a reference implementation using the workflow engine
+  - encompasses parts, BOMs, documents (work instructions, technical manuals, other version controlled documents), _and workflow configurations_.
+- CRUD Interface Layer: a reference implementation using XXX frontend framework
 - Supplier Management System
+
+### 🚧 Parts and Part Taxonomy Management
+
+In the reference implementation, everything is a `Part`. Any piece of data that requires a process to update is a `Part`.
+
 
 ## Quick Start
 
