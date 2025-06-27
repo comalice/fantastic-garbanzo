@@ -1,3 +1,5 @@
+# NOTE: Vibecoded using abacus.ai !!!
+
 # UBOM - Universal Business Object Model
 
 A comprehensive Product Lifecycle Management (PLM) system implementation in Go following the UBOM specification. This system provides a robust, scalable, and maintainable solution for managing complex business processes across the entire product lifecycle.
