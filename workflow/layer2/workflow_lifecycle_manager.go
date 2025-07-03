@@ -1,4 +1,3 @@
-
 package layer2
 
 import (
@@ -9,9 +8,9 @@ import (
 
 // WorkflowLifecycleEvent represents an event in the workflow lifecycle
 type WorkflowLifecycleEvent struct {
-	InstanceID WorkflowInstanceID `json:"instance_id"`
-	EventType  string             `json:"event_type"`
-	Timestamp  time.Time          `json:"timestamp"`
+	InstanceID WorkflowInstanceID     `json:"instance_id"`
+	EventType  string                 `json:"event_type"`
+	Timestamp  time.Time              `json:"timestamp"`
 	Data       map[string]interface{} `json:"data"`
 }
 
@@ -51,7 +50,7 @@ func (manager *DefaultWorkflowLifecycleManager) OnWorkflowStarted(instanceID Wor
 		Timestamp:  time.Now(),
 		Data:       map[string]interface{}{},
 	}
-	
+
 	manager.addEvent(instanceID, event)
 	log.Printf("Workflow %s started", instanceID)
 	return nil
@@ -65,7 +64,7 @@ func (manager *DefaultWorkflowLifecycleManager) OnWorkflowCompleted(instanceID W
 		Timestamp:  time.Now(),
 		Data:       map[string]interface{}{},
 	}
-	
+
 	manager.addEvent(instanceID, event)
 	log.Printf("Workflow %s completed", instanceID)
 	return nil
@@ -81,7 +80,7 @@ func (manager *DefaultWorkflowLifecycleManager) OnWorkflowFailed(instanceID Work
 			"error": err.Error(),
 		},
 	}
-	
+
 	manager.addEvent(instanceID, event)
 	log.Printf("Workflow %s failed: %v", instanceID, err)
 	return nil
@@ -95,7 +94,7 @@ func (manager *DefaultWorkflowLifecycleManager) OnWorkflowPaused(instanceID Work
 		Timestamp:  time.Now(),
 		Data:       map[string]interface{}{},
 	}
-	
+
 	manager.addEvent(instanceID, event)
 	log.Printf("Workflow %s paused", instanceID)
 	return nil
@@ -109,7 +108,7 @@ func (manager *DefaultWorkflowLifecycleManager) OnWorkflowResumed(instanceID Wor
 		Timestamp:  time.Now(),
 		Data:       map[string]interface{}{},
 	}
-	
+
 	manager.addEvent(instanceID, event)
 	log.Printf("Workflow %s resumed", instanceID)
 	return nil
@@ -123,7 +122,7 @@ func (manager *DefaultWorkflowLifecycleManager) OnWorkflowCancelled(instanceID W
 		Timestamp:  time.Now(),
 		Data:       map[string]interface{}{},
 	}
-	
+
 	manager.addEvent(instanceID, event)
 	log.Printf("Workflow %s cancelled", instanceID)
 	return nil
@@ -140,7 +139,7 @@ func (manager *DefaultWorkflowLifecycleManager) OnStateChanged(instanceID Workfl
 			"to_state":   toState,
 		},
 	}
-	
+
 	manager.addEvent(instanceID, event)
 	log.Printf("Workflow %s state changed from %s to %s", instanceID, fromState, toState)
 	return nil
@@ -150,12 +149,12 @@ func (manager *DefaultWorkflowLifecycleManager) OnStateChanged(instanceID Workfl
 func (manager *DefaultWorkflowLifecycleManager) GetEvents(instanceID WorkflowInstanceID) []WorkflowLifecycleEvent {
 	manager.mutex.RLock()
 	defer manager.mutex.RUnlock()
-	
+
 	events, exists := manager.events[instanceID]
 	if !exists {
 		return []WorkflowLifecycleEvent{}
 	}
-	
+
 	// Return a copy to prevent external modification
 	result := make([]WorkflowLifecycleEvent, len(events))
 	copy(result, events)
@@ -166,12 +165,12 @@ func (manager *DefaultWorkflowLifecycleManager) GetEvents(instanceID WorkflowIns
 func (manager *DefaultWorkflowLifecycleManager) GetAllEvents() []WorkflowLifecycleEvent {
 	manager.mutex.RLock()
 	defer manager.mutex.RUnlock()
-	
+
 	var allEvents []WorkflowLifecycleEvent
 	for _, events := range manager.events {
 		allEvents = append(allEvents, events...)
 	}
-	
+
 	return allEvents
 }
 
@@ -179,7 +178,7 @@ func (manager *DefaultWorkflowLifecycleManager) GetAllEvents() []WorkflowLifecyc
 func (manager *DefaultWorkflowLifecycleManager) ClearEvents(instanceID WorkflowInstanceID) error {
 	manager.mutex.Lock()
 	defer manager.mutex.Unlock()
-	
+
 	delete(manager.events, instanceID)
 	return nil
 }
@@ -188,10 +187,10 @@ func (manager *DefaultWorkflowLifecycleManager) ClearEvents(instanceID WorkflowI
 func (manager *DefaultWorkflowLifecycleManager) addEvent(instanceID WorkflowInstanceID, event WorkflowLifecycleEvent) {
 	manager.mutex.Lock()
 	defer manager.mutex.Unlock()
-	
+
 	if _, exists := manager.events[instanceID]; !exists {
 		manager.events[instanceID] = []WorkflowLifecycleEvent{}
 	}
-	
+
 	manager.events[instanceID] = append(manager.events[instanceID], event)
 }

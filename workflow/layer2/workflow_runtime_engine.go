@@ -1,4 +1,3 @@
-
 package layer2
 
 import (
@@ -12,15 +11,15 @@ import (
 
 // WorkflowRuntimeEngine provides the main runtime engine for executing workflows
 type WorkflowRuntimeEngine struct {
-        stateMachineCore       *layer1.StateMachineCore
-        workExecutionCore      *layer1.WorkExecutionCore
+        stateMachineCore        *layer1.StateMachineCore
+        workExecutionCore       *layer1.WorkExecutionCore
         conditionEvaluationCore *layer1.ConditionEvaluationCore
-        persistenceStore       StatePersistenceStore
-        transitionEvaluator    TransitionEvaluator
-        errorHandler           ErrorHandler
-        lifecycleManager       WorkflowLifecycleManager
-        activeInstances        map[WorkflowInstanceID]*WorkflowInstance
-        mutex                  sync.RWMutex
+        persistenceStore        StatePersistenceStore
+        transitionEvaluator     TransitionEvaluator
+        errorHandler            ErrorHandler
+        lifecycleManager        WorkflowLifecycleManager
+        activeInstances         map[WorkflowInstanceID]*WorkflowInstance
+        mutex                   sync.RWMutex
 }
 
 // WorkflowRuntimeEngineInterface defines the contract for the workflow runtime engine
@@ -31,22 +30,22 @@ type WorkflowRuntimeEngineInterface interface {
         PauseWorkflow(instanceID WorkflowInstanceID) error
         ResumeWorkflow(instanceID WorkflowInstanceID) error
         CancelWorkflow(instanceID WorkflowInstanceID) error
-        
+
         // Execution operations
         ExecuteStep(instanceID WorkflowInstanceID) error
         ExecuteWorkflow(instanceID WorkflowInstanceID) error
-        
+
         // Query operations
         GetWorkflowInstance(instanceID WorkflowInstanceID) (*WorkflowInstance, error)
         GetWorkflowStatus(instanceID WorkflowInstanceID) (WorkflowInstanceStatus, error)
         ListActiveWorkflows() []WorkflowInstanceID
-        
+
         // Configuration
         SetPersistenceStore(store StatePersistenceStore)
         SetTransitionEvaluator(evaluator TransitionEvaluator)
         SetErrorHandler(handler ErrorHandler)
         SetLifecycleManager(manager WorkflowLifecycleManager)
-        
+
         // Cleanup
         Shutdown() error
 }
@@ -229,6 +228,12 @@ func (engine *WorkflowRuntimeEngine) CancelWorkflow(instanceID WorkflowInstanceI
         engine.mutex.Lock()
         defer engine.mutex.Unlock()
 
+        return engine.cancelWorkflowUnsafe(instanceID)
+}
+
+// cancelWorkflowUnsafe cancels a workflow instance without acquiring the mutex
+// This method assumes the caller already holds the mutex lock
+func (engine *WorkflowRuntimeEngine) cancelWorkflowUnsafe(instanceID WorkflowInstanceID) error {
         instance, exists := engine.activeInstances[instanceID]
         if !exists {
                 return fmt.Errorf("workflow instance %s not found", instanceID)
@@ -318,7 +323,7 @@ func (engine *WorkflowRuntimeEngine) executeTransition(instanceID WorkflowInstan
         for _, actionID := range transition.GetActions() {
                 // Create work item
                 work := layer0.NewWork(layer0.WorkID(actionID), layer0.WorkTypeTask, fmt.Sprintf("Action %s", actionID))
-                
+
                 // Execute work
                 result, err := engine.workExecutionCore.ExecuteWork(work, instance.Context)
                 if err != nil {
@@ -355,7 +360,7 @@ func (engine *WorkflowRuntimeEngine) executeTransition(instanceID WorkflowInstan
 // ExecuteWorkflow executes a workflow until completion or error
 func (engine *WorkflowRuntimeEngine) ExecuteWorkflow(instanceID WorkflowInstanceID) error {
         maxSteps := 1000 // Prevent infinite loops
-        
+
         for i := 0; i < maxSteps; i++ {
                 err := engine.ExecuteStep(instanceID)
                 if err != nil {
@@ -448,7 +453,7 @@ func (engine *WorkflowRuntimeEngine) Shutdown() error {
 
         // Stop all active workflows
         for instanceID := range engine.activeInstances {
-                if err := engine.CancelWorkflow(instanceID); err != nil {
+                if err := engine.cancelWorkflowUnsafe(instanceID); err != nil {
                         // Log error but continue shutdown
                         engine.errorHandler.HandleError(instanceID, fmt.Errorf("shutdown error: %w", err))
                 }

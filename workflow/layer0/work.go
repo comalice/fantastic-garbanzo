@@ -1,4 +1,3 @@
-
 package layer0
 
 import (
@@ -24,22 +23,22 @@ const (
 type WorkStatus string
 
 const (
-	WorkStatusPending    WorkStatus = "pending"
-	WorkStatusScheduled  WorkStatus = "scheduled"
-	WorkStatusExecuting  WorkStatus = "executing"
-	WorkStatusCompleted  WorkStatus = "completed"
-	WorkStatusFailed     WorkStatus = "failed"
-	WorkStatusCancelled  WorkStatus = "cancelled"
-	WorkStatusRetrying   WorkStatus = "retrying"
+	WorkStatusPending   WorkStatus = "pending"
+	WorkStatusScheduled WorkStatus = "scheduled"
+	WorkStatusExecuting WorkStatus = "executing"
+	WorkStatusCompleted WorkStatus = "completed"
+	WorkStatusFailed    WorkStatus = "failed"
+	WorkStatusCancelled WorkStatus = "cancelled"
+	WorkStatusRetrying  WorkStatus = "retrying"
 )
 
 // WorkPriority defines the priority level of work
 type WorkPriority int
 
 const (
-	WorkPriorityLow    WorkPriority = 1
-	WorkPriorityNormal WorkPriority = 5
-	WorkPriorityHigh   WorkPriority = 10
+	WorkPriorityLow      WorkPriority = 1
+	WorkPriorityNormal   WorkPriority = 5
+	WorkPriorityHigh     WorkPriority = 10
 	WorkPriorityCritical WorkPriority = 15
 )
 
@@ -67,16 +66,16 @@ type WorkConfiguration struct {
 
 // Work represents an atomic unit of work in the workflow system
 type Work struct {
-	ID            WorkID            `json:"id"`
-	Type          WorkType          `json:"type"`
-	Status        WorkStatus        `json:"status"`
-	Priority      WorkPriority      `json:"priority"`
-	Metadata      WorkMetadata      `json:"metadata"`
-	Configuration WorkConfiguration `json:"configuration"`
-	Input         interface{}       `json:"input"`
-	Output        interface{}       `json:"output"`
-	Error         string            `json:"error,omitempty"`
-	CompensationWorkID *WorkID      `json:"compensation_work_id,omitempty"`
+	ID                 WorkID            `json:"id"`
+	Type               WorkType          `json:"type"`
+	Status             WorkStatus        `json:"status"`
+	Priority           WorkPriority      `json:"priority"`
+	Metadata           WorkMetadata      `json:"metadata"`
+	Configuration      WorkConfiguration `json:"configuration"`
+	Input              interface{}       `json:"input"`
+	Output             interface{}       `json:"output"`
+	Error              string            `json:"error,omitempty"`
+	CompensationWorkID *WorkID           `json:"compensation_work_id,omitempty"`
 }
 
 // WorkInterface defines the contract for work operations
@@ -280,27 +279,27 @@ func (w Work) Clone() Work {
 		CreatedAt:   w.Metadata.CreatedAt,
 		UpdatedAt:   w.Metadata.UpdatedAt,
 	}
-	
+
 	copy(metadata.Tags, w.Metadata.Tags)
 	for k, v := range w.Metadata.Properties {
 		metadata.Properties[k] = v
 	}
-	
+
 	if w.Metadata.ScheduledAt != nil {
 		scheduledAt := *w.Metadata.ScheduledAt
 		metadata.ScheduledAt = &scheduledAt
 	}
-	
+
 	if w.Metadata.StartedAt != nil {
 		startedAt := *w.Metadata.StartedAt
 		metadata.StartedAt = &startedAt
 	}
-	
+
 	if w.Metadata.CompletedAt != nil {
 		completedAt := *w.Metadata.CompletedAt
 		metadata.CompletedAt = &completedAt
 	}
-	
+
 	configuration := WorkConfiguration{
 		TimeoutSeconds:    w.Configuration.TimeoutSeconds,
 		RetryCount:        w.Configuration.RetryCount,
@@ -308,21 +307,21 @@ func (w Work) Clone() Work {
 		Parameters:        make(map[string]interface{}),
 		Environment:       make(map[string]string),
 	}
-	
+
 	for k, v := range w.Configuration.Parameters {
 		configuration.Parameters[k] = v
 	}
-	
+
 	for k, v := range w.Configuration.Environment {
 		configuration.Environment[k] = v
 	}
-	
+
 	var compensationWorkID *WorkID
 	if w.CompensationWorkID != nil {
 		id := *w.CompensationWorkID
 		compensationWorkID = &id
 	}
-	
+
 	return Work{
 		ID:                 w.ID,
 		Type:               w.Type,
@@ -342,30 +341,30 @@ func (w Work) Validate() error {
 	if w.ID == "" {
 		return fmt.Errorf("work ID cannot be empty")
 	}
-	
+
 	if w.Type == "" {
 		return fmt.Errorf("work type cannot be empty")
 	}
-	
+
 	if w.Status == "" {
 		return fmt.Errorf("work status cannot be empty")
 	}
-	
+
 	if w.Metadata.Name == "" {
 		return fmt.Errorf("work name cannot be empty")
 	}
-	
+
 	if w.Configuration.TimeoutSeconds <= 0 {
 		return fmt.Errorf("timeout seconds must be positive")
 	}
-	
+
 	if w.Configuration.RetryCount < 0 {
 		return fmt.Errorf("retry count cannot be negative")
 	}
-	
+
 	if w.Configuration.RetryDelaySeconds < 0 {
 		return fmt.Errorf("retry delay seconds cannot be negative")
 	}
-	
+
 	return nil
 }

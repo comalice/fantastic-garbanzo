@@ -1,4 +1,3 @@
-
 package layer0
 
 import (
@@ -13,10 +12,10 @@ type StateID string
 type StateType string
 
 const (
-	StateTypeInitial    StateType = "initial"
+	StateTypeInitial      StateType = "initial"
 	StateTypeIntermediate StateType = "intermediate"
-	StateTypeFinal      StateType = "final"
-	StateTypeError      StateType = "error"
+	StateTypeFinal        StateType = "final"
+	StateTypeError        StateType = "error"
 )
 
 // StateStatus represents the current status of a state
@@ -150,12 +149,12 @@ func (s State) Clone() State {
 		CreatedAt:   s.Metadata.CreatedAt,
 		UpdatedAt:   s.Metadata.UpdatedAt,
 	}
-	
+
 	copy(metadata.Tags, s.Metadata.Tags)
 	for k, v := range s.Metadata.Properties {
 		metadata.Properties[k] = v
 	}
-	
+
 	return State{
 		ID:       s.ID,
 		Type:     s.Type,
@@ -170,18 +169,18 @@ func (s State) Validate() error {
 	if s.ID == "" {
 		return fmt.Errorf("state ID cannot be empty")
 	}
-	
+
 	if s.Type == "" {
 		return fmt.Errorf("state type cannot be empty")
 	}
-	
+
 	if s.Status == "" {
 		return fmt.Errorf("state status cannot be empty")
 	}
-	
+
 	if s.Metadata.Name == "" {
 		return fmt.Errorf("state name cannot be empty")
 	}
-	
+
 	return nil
 }

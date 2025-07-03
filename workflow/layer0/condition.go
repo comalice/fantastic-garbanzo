@@ -1,4 +1,3 @@
-
 package layer0
 
 import (
@@ -60,14 +59,14 @@ type ConditionExpression struct {
 
 // Condition represents an atomic condition in the workflow system
 type Condition struct {
-	ID         ConditionID         `json:"id"`
-	Type       ConditionType       `json:"type"`
-	Status     ConditionStatus     `json:"status"`
-	Metadata   ConditionMetadata   `json:"metadata"`
-	Expression ConditionExpression `json:"expression"`
-	Result     interface{}         `json:"result"`
-	Error      string              `json:"error,omitempty"`
-	Dependencies []ConditionID     `json:"dependencies"` // Other conditions this depends on
+	ID           ConditionID         `json:"id"`
+	Type         ConditionType       `json:"type"`
+	Status       ConditionStatus     `json:"status"`
+	Metadata     ConditionMetadata   `json:"metadata"`
+	Expression   ConditionExpression `json:"expression"`
+	Result       interface{}         `json:"result"`
+	Error        string              `json:"error,omitempty"`
+	Dependencies []ConditionID       `json:"dependencies"` // Other conditions this depends on
 }
 
 // ConditionInterface defines the contract for condition operations
@@ -198,7 +197,7 @@ func (c Condition) MarkEvaluated(result interface{}) Condition {
 	newCondition := c.SetResult(result)
 	now := time.Now()
 	newCondition.Metadata.EvaluatedAt = &now
-	
+
 	// Determine status based on result
 	if result == nil {
 		newCondition.Status = ConditionStatusFalse
@@ -212,7 +211,7 @@ func (c Condition) MarkEvaluated(result interface{}) Condition {
 		// Non-boolean results are considered true if not nil/empty
 		newCondition.Status = ConditionStatusTrue
 	}
-	
+
 	return newCondition
 }
 
@@ -259,30 +258,30 @@ func (c Condition) Clone() Condition {
 		CreatedAt:   c.Metadata.CreatedAt,
 		UpdatedAt:   c.Metadata.UpdatedAt,
 	}
-	
+
 	copy(metadata.Tags, c.Metadata.Tags)
 	for k, v := range c.Metadata.Properties {
 		metadata.Properties[k] = v
 	}
-	
+
 	if c.Metadata.EvaluatedAt != nil {
 		evaluatedAt := *c.Metadata.EvaluatedAt
 		metadata.EvaluatedAt = &evaluatedAt
 	}
-	
+
 	expression := ConditionExpression{
 		Expression: c.Expression.Expression,
 		Variables:  make(map[string]interface{}),
 		Language:   c.Expression.Language,
 	}
-	
+
 	for k, v := range c.Expression.Variables {
 		expression.Variables[k] = v
 	}
-	
+
 	dependencies := make([]ConditionID, len(c.Dependencies))
 	copy(dependencies, c.Dependencies)
-	
+
 	return Condition{
 		ID:           c.ID,
 		Type:         c.Type,
@@ -300,22 +299,22 @@ func (c Condition) Validate() error {
 	if c.ID == "" {
 		return fmt.Errorf("condition ID cannot be empty")
 	}
-	
+
 	if c.Type == "" {
 		return fmt.Errorf("condition type cannot be empty")
 	}
-	
+
 	if c.Status == "" {
 		return fmt.Errorf("condition status cannot be empty")
 	}
-	
+
 	if c.Metadata.Name == "" {
 		return fmt.Errorf("condition name cannot be empty")
 	}
-	
+
 	if c.Type == ConditionTypeExpression && c.Expression.Expression == "" {
 		return fmt.Errorf("expression condition must have an expression")
 	}
-	
+
 	return nil
 }

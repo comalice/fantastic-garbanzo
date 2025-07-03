@@ -123,7 +123,7 @@ func TestConditionEvaluationCoreEvaluateCondition(t *testing.T) {
 	}
 
 	// Register evaluator
-	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx layer0.Context) (interface{}, error) {
+	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx *layer0.Context) (interface{}, error) {
 		return true, nil
 	})
 	cec.RegisterEvaluator(layer0.ConditionTypeExpression, evaluator)
@@ -160,7 +160,7 @@ func TestConditionEvaluationCoreEvaluateConditionWithError(t *testing.T) {
 	context := layer0.NewContext("test-context", layer0.ContextScopeWork, "Test Context")
 
 	// Register evaluator that returns error
-	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx layer0.Context) (interface{}, error) {
+	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx *layer0.Context) (interface{}, error) {
 		return nil, errors.New("evaluation failed")
 	})
 	cec.RegisterEvaluator(layer0.ConditionTypeExpression, evaluator)
@@ -189,7 +189,7 @@ func TestConditionEvaluationCoreEvaluateConditionWithDifferentResults(t *testing
 	context := layer0.NewContext("test-context", layer0.ContextScopeWork, "Test Context")
 
 	// Test boolean false result
-	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx layer0.Context) (interface{}, error) {
+	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx *layer0.Context) (interface{}, error) {
 		return false, nil
 	})
 	cec.RegisterEvaluator(layer0.ConditionTypeExpression, evaluator)
@@ -204,7 +204,7 @@ func TestConditionEvaluationCoreEvaluateConditionWithDifferentResults(t *testing
 
 	// Test nil result
 	cec.UnregisterEvaluator(layer0.ConditionTypeExpression)
-	evaluator = NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx layer0.Context) (interface{}, error) {
+	evaluator = NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx *layer0.Context) (interface{}, error) {
 		return nil, nil
 	})
 	cec.RegisterEvaluator(layer0.ConditionTypeExpression, evaluator)
@@ -219,7 +219,7 @@ func TestConditionEvaluationCoreEvaluateConditionWithDifferentResults(t *testing
 
 	// Test non-boolean result
 	cec.UnregisterEvaluator(layer0.ConditionTypeExpression)
-	evaluator = NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx layer0.Context) (interface{}, error) {
+	evaluator = NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx *layer0.Context) (interface{}, error) {
 		return "non-empty string", nil
 	})
 	cec.RegisterEvaluator(layer0.ConditionTypeExpression, evaluator)
@@ -242,7 +242,7 @@ func TestConditionEvaluationCoreEvaluateAlreadyActiveCondition(t *testing.T) {
 	context := layer0.NewContext("test-context", layer0.ContextScopeWork, "Test Context")
 
 	// Register evaluator that takes time
-	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx layer0.Context) (interface{}, error) {
+	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx *layer0.Context) (interface{}, error) {
 		time.Sleep(100 * time.Millisecond)
 		return true, nil
 	})
@@ -266,7 +266,7 @@ func TestConditionEvaluationCoreEvaluateConditions(t *testing.T) {
 	context := layer0.NewContext("test-context", layer0.ContextScopeWork, "Test Context")
 
 	// Register evaluator
-	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx layer0.Context) (interface{}, error) {
+	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx *layer0.Context) (interface{}, error) {
 		// Return true for conditions with "true" in expression, false otherwise
 		return c.GetExpression().Expression == "true", nil
 	})
@@ -365,7 +365,7 @@ func TestConditionEvaluationCoreGetEvaluationResult(t *testing.T) {
 	context := layer0.NewContext("test-context", layer0.ContextScopeWork, "Test Context")
 
 	// Register evaluator
-	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx layer0.Context) (interface{}, error) {
+	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx *layer0.Context) (interface{}, error) {
 		return true, nil
 	})
 	cec.RegisterEvaluator(layer0.ConditionTypeExpression, evaluator)
@@ -404,7 +404,7 @@ func TestConditionEvaluationCoreGetAllEvaluationResults(t *testing.T) {
 	condition2.Expression.Expression = "true"
 	context := layer0.NewContext("test-context", layer0.ContextScopeWork, "Test Context")
 
-	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx layer0.Context) (interface{}, error) {
+	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx *layer0.Context) (interface{}, error) {
 		return true, nil
 	})
 	cec.RegisterEvaluator(layer0.ConditionTypeExpression, evaluator)
@@ -433,7 +433,7 @@ func TestConditionEvaluationCoreIsConditionEvaluating(t *testing.T) {
 	context := layer0.NewContext("test-context", layer0.ContextScopeWork, "Test Context")
 
 	// Register evaluator that takes time
-	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx layer0.Context) (interface{}, error) {
+	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx *layer0.Context) (interface{}, error) {
 		time.Sleep(100 * time.Millisecond)
 		return true, nil
 	})
@@ -474,7 +474,7 @@ func TestConditionEvaluationCoreGetActiveEvaluations(t *testing.T) {
 	context := layer0.NewContext("test-context", layer0.ContextScopeWork, "Test Context")
 
 	// Register evaluator that takes time
-	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx layer0.Context) (interface{}, error) {
+	evaluator := NewMockConditionEvaluator([]layer0.ConditionType{layer0.ConditionTypeExpression}, func(c layer0.Condition, ctx *layer0.Context) (interface{}, error) {
 		time.Sleep(100 * time.Millisecond)
 		return true, nil
 	})
@@ -508,7 +508,7 @@ func TestConditionEvaluationCoreGetActiveEvaluations(t *testing.T) {
 
 func TestMockConditionEvaluator(t *testing.T) {
 	supportedTypes := []layer0.ConditionType{layer0.ConditionTypeExpression, layer0.ConditionTypeScript}
-	evaluateFunc := func(condition layer0.Condition, context layer0.Context) (interface{}, error) {
+	evaluateFunc := func(condition layer0.Condition, context *layer0.Context) (interface{}, error) {
 		return "custom result", nil
 	}
 

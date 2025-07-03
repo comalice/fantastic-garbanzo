@@ -122,7 +122,7 @@ func TestWorkExecutionCoreExecuteWork(t *testing.T) {
 	}
 
 	// Register executor
-	executor := NewMockWorkExecutor([]layer0.WorkType{layer0.WorkTypeTask}, func(w layer0.Work, c layer0.Context) (interface{}, error) {
+	executor := NewMockWorkExecutor([]layer0.WorkType{layer0.WorkTypeTask}, func(w layer0.Work, c *layer0.Context) (interface{}, error) {
 		return "test result", nil
 	})
 	wec.RegisterExecutor(layer0.WorkTypeTask, executor)
@@ -162,7 +162,7 @@ func TestWorkExecutionCoreExecuteWorkWithError(t *testing.T) {
 	context := layer0.NewContext("test-context", layer0.ContextScopeWork, "Test Context")
 
 	// Register executor that returns error
-	executor := NewMockWorkExecutor([]layer0.WorkType{layer0.WorkTypeTask}, func(w layer0.Work, c layer0.Context) (interface{}, error) {
+	executor := NewMockWorkExecutor([]layer0.WorkType{layer0.WorkTypeTask}, func(w layer0.Work, c *layer0.Context) (interface{}, error) {
 		return nil, errors.New("execution failed")
 	})
 	wec.RegisterExecutor(layer0.WorkTypeTask, executor)
@@ -212,7 +212,7 @@ func TestWorkExecutionCoreExecuteAlreadyActiveWork(t *testing.T) {
 	context := layer0.NewContext("test-context", layer0.ContextScopeWork, "Test Context")
 
 	// Register executor that takes time
-	executor := NewMockWorkExecutor([]layer0.WorkType{layer0.WorkTypeTask}, func(w layer0.Work, c layer0.Context) (interface{}, error) {
+	executor := NewMockWorkExecutor([]layer0.WorkType{layer0.WorkTypeTask}, func(w layer0.Work, c *layer0.Context) (interface{}, error) {
 		time.Sleep(100 * time.Millisecond)
 		return "result", nil
 	})
@@ -245,7 +245,7 @@ func TestWorkExecutionCoreGetActiveWork(t *testing.T) {
 	context := layer0.NewContext("test-context", layer0.ContextScopeWork, "Test Context")
 
 	// Register executor that takes time
-	executor := NewMockWorkExecutor([]layer0.WorkType{layer0.WorkTypeTask}, func(w layer0.Work, c layer0.Context) (interface{}, error) {
+	executor := NewMockWorkExecutor([]layer0.WorkType{layer0.WorkTypeTask}, func(w layer0.Work, c *layer0.Context) (interface{}, error) {
 		time.Sleep(100 * time.Millisecond)
 		return "result", nil
 	})
@@ -291,7 +291,7 @@ func TestWorkExecutionCoreGetExecutionResult(t *testing.T) {
 	context := layer0.NewContext("test-context", layer0.ContextScopeWork, "Test Context")
 
 	// Register executor
-	executor := NewMockWorkExecutor([]layer0.WorkType{layer0.WorkTypeTask}, func(w layer0.Work, c layer0.Context) (interface{}, error) {
+	executor := NewMockWorkExecutor([]layer0.WorkType{layer0.WorkTypeTask}, func(w layer0.Work, c *layer0.Context) (interface{}, error) {
 		return "test result", nil
 	})
 	wec.RegisterExecutor(layer0.WorkTypeTask, executor)
@@ -328,7 +328,7 @@ func TestWorkExecutionCoreGetAllExecutionResults(t *testing.T) {
 	work2 := layer0.NewWork("work2", layer0.WorkTypeTask, "Work 2")
 	context := layer0.NewContext("test-context", layer0.ContextScopeWork, "Test Context")
 
-	executor := NewMockWorkExecutor([]layer0.WorkType{layer0.WorkTypeTask}, func(w layer0.Work, c layer0.Context) (interface{}, error) {
+	executor := NewMockWorkExecutor([]layer0.WorkType{layer0.WorkTypeTask}, func(w layer0.Work, c *layer0.Context) (interface{}, error) {
 		return "result", nil
 	})
 	wec.RegisterExecutor(layer0.WorkTypeTask, executor)
@@ -357,7 +357,7 @@ func TestWorkExecutionCoreCancelWork(t *testing.T) {
 	context := layer0.NewContext("test-context", layer0.ContextScopeWork, "Test Context")
 
 	// Register executor that takes time
-	executor := NewMockWorkExecutor([]layer0.WorkType{layer0.WorkTypeTask}, func(w layer0.Work, c layer0.Context) (interface{}, error) {
+	executor := NewMockWorkExecutor([]layer0.WorkType{layer0.WorkTypeTask}, func(w layer0.Work, c *layer0.Context) (interface{}, error) {
 		time.Sleep(200 * time.Millisecond)
 		return "result", nil
 	})
@@ -408,7 +408,7 @@ func TestWorkExecutionCoreIsWorkActive(t *testing.T) {
 	context := layer0.NewContext("test-context", layer0.ContextScopeWork, "Test Context")
 
 	// Register executor that takes time
-	executor := NewMockWorkExecutor([]layer0.WorkType{layer0.WorkTypeTask}, func(w layer0.Work, c layer0.Context) (interface{}, error) {
+	executor := NewMockWorkExecutor([]layer0.WorkType{layer0.WorkTypeTask}, func(w layer0.Work, c *layer0.Context) (interface{}, error) {
 		time.Sleep(100 * time.Millisecond)
 		return "result", nil
 	})
@@ -436,7 +436,7 @@ func TestWorkExecutionCoreIsWorkActive(t *testing.T) {
 
 func TestMockWorkExecutor(t *testing.T) {
 	supportedTypes := []layer0.WorkType{layer0.WorkTypeTask, layer0.WorkTypeService}
-	executeFunc := func(work layer0.Work, context layer0.Context) (interface{}, error) {
+	executeFunc := func(work layer0.Work, context *layer0.Context) (interface{}, error) {
 		return "custom result", nil
 	}
 

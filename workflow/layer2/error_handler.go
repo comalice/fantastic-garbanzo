@@ -1,4 +1,3 @@
-
 package layer2
 
 import (
@@ -159,38 +158,38 @@ func (handler *DefaultErrorHandler) IsRecoverable(err error) bool {
 
 	// Simple heuristics for determining recoverability
 	errorMsg := err.Error()
-	
+
 	// Network-related errors are often recoverable
 	if contains(errorMsg, "timeout") || contains(errorMsg, "connection") || contains(errorMsg, "network") {
 		return true
 	}
-	
+
 	// Resource-related errors might be recoverable
 	if contains(errorMsg, "resource") || contains(errorMsg, "memory") || contains(errorMsg, "disk") {
 		return true
 	}
-	
+
 	// Validation errors are typically not recoverable without intervention
 	if contains(errorMsg, "validation") || contains(errorMsg, "invalid") || contains(errorMsg, "malformed") {
 		return false
 	}
-	
+
 	// Permission errors are typically not recoverable
 	if contains(errorMsg, "permission") || contains(errorMsg, "unauthorized") || contains(errorMsg, "forbidden") {
 		return false
 	}
-	
+
 	// Default to recoverable for unknown errors
 	return true
 }
 
 // contains checks if a string contains a substring (case-insensitive)
 func contains(s, substr string) bool {
-	return len(s) >= len(substr) && (s == substr || 
-		(len(s) > len(substr) && 
-			(s[:len(substr)] == substr || 
-			 s[len(s)-len(substr):] == substr ||
-			 containsSubstring(s, substr))))
+	return len(s) >= len(substr) && (s == substr ||
+		(len(s) > len(substr) &&
+			(s[:len(substr)] == substr ||
+				s[len(s)-len(substr):] == substr ||
+				containsSubstring(s, substr))))
 }
 
 // containsSubstring checks if a string contains a substring

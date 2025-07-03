@@ -267,11 +267,11 @@ func (wec *WorkExecutionCore) IsWorkActive(workID layer0.WorkID) bool {
 // MockWorkExecutor is a simple mock executor for testing
 type MockWorkExecutor struct {
 	supportedTypes []layer0.WorkType
-	executeFunc    func(work layer0.Work, context layer0.Context) (interface{}, error)
+	executeFunc    func(work layer0.Work, context *layer0.Context) (interface{}, error)
 }
 
 // NewMockWorkExecutor creates a new mock work executor
-func NewMockWorkExecutor(supportedTypes []layer0.WorkType, executeFunc func(layer0.Work, layer0.Context) (interface{}, error)) *MockWorkExecutor {
+func NewMockWorkExecutor(supportedTypes []layer0.WorkType, executeFunc func(layer0.Work, *layer0.Context) (interface{}, error)) *MockWorkExecutor {
 	return &MockWorkExecutor{
 		supportedTypes: supportedTypes,
 		executeFunc:    executeFunc,
@@ -279,7 +279,7 @@ func NewMockWorkExecutor(supportedTypes []layer0.WorkType, executeFunc func(laye
 }
 
 // Execute executes the work using the mock function
-func (mwe *MockWorkExecutor) Execute(work layer0.Work, context layer0.Context) (interface{}, error) {
+func (mwe *MockWorkExecutor) Execute(work layer0.Work, context *layer0.Context) (interface{}, error) {
 	if mwe.executeFunc != nil {
 		return mwe.executeFunc(work, context)
 	}

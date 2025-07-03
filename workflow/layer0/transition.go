@@ -1,4 +1,3 @@
-
 package layer0
 
 import (
@@ -13,9 +12,9 @@ type TransitionID string
 type TransitionType string
 
 const (
-	TransitionTypeAutomatic TransitionType = "automatic"
-	TransitionTypeManual    TransitionType = "manual"
-	TransitionTypeConditional TransitionType = "conditional"
+	TransitionTypeAutomatic    TransitionType = "automatic"
+	TransitionTypeManual       TransitionType = "manual"
+	TransitionTypeConditional  TransitionType = "conditional"
 	TransitionTypeCompensation TransitionType = "compensation"
 )
 
@@ -23,13 +22,13 @@ const (
 type TransitionStatus string
 
 const (
-	TransitionStatusPending   TransitionStatus = "pending"
+	TransitionStatusPending    TransitionStatus = "pending"
 	TransitionStatusEvaluating TransitionStatus = "evaluating"
-	TransitionStatusReady     TransitionStatus = "ready"
-	TransitionStatusExecuting TransitionStatus = "executing"
-	TransitionStatusCompleted TransitionStatus = "completed"
-	TransitionStatusFailed    TransitionStatus = "failed"
-	TransitionStatusSkipped   TransitionStatus = "skipped"
+	TransitionStatusReady      TransitionStatus = "ready"
+	TransitionStatusExecuting  TransitionStatus = "executing"
+	TransitionStatusCompleted  TransitionStatus = "completed"
+	TransitionStatusFailed     TransitionStatus = "failed"
+	TransitionStatusSkipped    TransitionStatus = "skipped"
 )
 
 // TransitionMetadata contains metadata about a transition
@@ -47,13 +46,13 @@ type Transition struct {
 	ID          TransitionID       `json:"id"`
 	Type        TransitionType     `json:"type"`
 	Status      TransitionStatus   `json:"status"`
-	FromStateID StateID           `json:"from_state_id"`
-	ToStateID   StateID           `json:"to_state_id"`
+	FromStateID StateID            `json:"from_state_id"`
+	ToStateID   StateID            `json:"to_state_id"`
 	Metadata    TransitionMetadata `json:"metadata"`
-	Conditions  []string          `json:"conditions"`  // References to condition IDs
-	Actions     []string          `json:"actions"`     // References to work IDs
-	Priority    int               `json:"priority"`
-	Data        interface{}       `json:"data"`
+	Conditions  []string           `json:"conditions"` // References to condition IDs
+	Actions     []string           `json:"actions"`    // References to work IDs
+	Priority    int                `json:"priority"`
+	Data        interface{}        `json:"data"`
 }
 
 // TransitionInterface defines the contract for transition operations
@@ -210,18 +209,18 @@ func (t Transition) Clone() Transition {
 		CreatedAt:   t.Metadata.CreatedAt,
 		UpdatedAt:   t.Metadata.UpdatedAt,
 	}
-	
+
 	copy(metadata.Tags, t.Metadata.Tags)
 	for k, v := range t.Metadata.Properties {
 		metadata.Properties[k] = v
 	}
-	
+
 	conditions := make([]string, len(t.Conditions))
 	copy(conditions, t.Conditions)
-	
+
 	actions := make([]string, len(t.Actions))
 	copy(actions, t.Actions)
-	
+
 	return Transition{
 		ID:          t.ID,
 		Type:        t.Type,
@@ -241,26 +240,26 @@ func (t Transition) Validate() error {
 	if t.ID == "" {
 		return fmt.Errorf("transition ID cannot be empty")
 	}
-	
+
 	if t.Type == "" {
 		return fmt.Errorf("transition type cannot be empty")
 	}
-	
+
 	if t.Status == "" {
 		return fmt.Errorf("transition status cannot be empty")
 	}
-	
+
 	if t.FromStateID == "" {
 		return fmt.Errorf("from state ID cannot be empty")
 	}
-	
+
 	if t.ToStateID == "" {
 		return fmt.Errorf("to state ID cannot be empty")
 	}
-	
+
 	if t.Metadata.Name == "" {
 		return fmt.Errorf("transition name cannot be empty")
 	}
-	
+
 	return nil
 }
