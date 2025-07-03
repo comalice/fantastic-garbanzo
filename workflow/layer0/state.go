@@ -12,21 +12,30 @@ type StateID string
 type StateType string
 
 const (
-	StateTypeInitial      StateType = "initial"
+	// StateTypeInitial represents the starting state of a workflow
+	StateTypeInitial StateType = "initial"
+	// StateTypeIntermediate represents a state that is neither initial nor final
 	StateTypeIntermediate StateType = "intermediate"
-	StateTypeFinal        StateType = "final"
-	StateTypeError        StateType = "error"
+	// StateTypeFinal represents a terminal state that ends the workflow successfully
+	StateTypeFinal StateType = "final"
+	// StateTypeError represents a terminal state that ends the workflow with an error
+	StateTypeError StateType = "error"
 )
 
 // StateStatus represents the current status of a state
 type StateStatus string
 
 const (
-	StateStatusActive   StateStatus = "active"
+	// StateStatusActive indicates the state is currently active and processing
+	StateStatusActive StateStatus = "active"
+	// StateStatusInactive indicates the state is not currently active
 	StateStatusInactive StateStatus = "inactive"
-	StateStatusPending  StateStatus = "pending"
+	// StateStatusPending indicates the state is waiting to become active
+	StateStatusPending StateStatus = "pending"
+	// StateStatusComplete indicates the state has finished processing successfully
 	StateStatusComplete StateStatus = "complete"
-	StateStatusFailed   StateStatus = "failed"
+	// StateStatusFailed indicates the state has failed during processing
+	StateStatusFailed StateStatus = "failed"
 )
 
 // StateMetadata contains metadata about a state

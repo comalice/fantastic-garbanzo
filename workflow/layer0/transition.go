@@ -12,9 +12,13 @@ type TransitionID string
 type TransitionType string
 
 const (
-	TransitionTypeAutomatic    TransitionType = "automatic"
-	TransitionTypeManual       TransitionType = "manual"
-	TransitionTypeConditional  TransitionType = "conditional"
+	// TransitionTypeAutomatic represents a transition that occurs automatically without external triggers
+	TransitionTypeAutomatic TransitionType = "automatic"
+	// TransitionTypeManual represents a transition that requires manual intervention to execute
+	TransitionTypeManual TransitionType = "manual"
+	// TransitionTypeConditional represents a transition that executes based on condition evaluation
+	TransitionTypeConditional TransitionType = "conditional"
+	// TransitionTypeCompensation represents a transition used for error recovery and rollback
 	TransitionTypeCompensation TransitionType = "compensation"
 )
 
@@ -22,13 +26,20 @@ const (
 type TransitionStatus string
 
 const (
-	TransitionStatusPending    TransitionStatus = "pending"
+	// TransitionStatusPending indicates the transition is waiting to be evaluated or executed
+	TransitionStatusPending TransitionStatus = "pending"
+	// TransitionStatusEvaluating indicates the transition is currently being evaluated
 	TransitionStatusEvaluating TransitionStatus = "evaluating"
-	TransitionStatusReady      TransitionStatus = "ready"
-	TransitionStatusExecuting  TransitionStatus = "executing"
-	TransitionStatusCompleted  TransitionStatus = "completed"
-	TransitionStatusFailed     TransitionStatus = "failed"
-	TransitionStatusSkipped    TransitionStatus = "skipped"
+	// TransitionStatusReady indicates the transition is ready to be executed
+	TransitionStatusReady TransitionStatus = "ready"
+	// TransitionStatusExecuting indicates the transition is currently being executed
+	TransitionStatusExecuting TransitionStatus = "executing"
+	// TransitionStatusCompleted indicates the transition has been executed successfully
+	TransitionStatusCompleted TransitionStatus = "completed"
+	// TransitionStatusFailed indicates the transition execution has failed
+	TransitionStatusFailed TransitionStatus = "failed"
+	// TransitionStatusSkipped indicates the transition was skipped during execution
+	TransitionStatusSkipped TransitionStatus = "skipped"
 )
 
 // TransitionMetadata contains metadata about a transition

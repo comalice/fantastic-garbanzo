@@ -17,9 +17,13 @@ type WorkflowDefinitionVersion string
 type WorkflowDefinitionStatus string
 
 const (
-	WorkflowDefinitionStatusDraft      WorkflowDefinitionStatus = "draft"
-	WorkflowDefinitionStatusActive     WorkflowDefinitionStatus = "active"
-	WorkflowDefinitionStatusInactive   WorkflowDefinitionStatus = "inactive"
+	// WorkflowDefinitionStatusDraft indicates the workflow definition is in draft state and not yet active
+	WorkflowDefinitionStatusDraft WorkflowDefinitionStatus = "draft"
+	// WorkflowDefinitionStatusActive indicates the workflow definition is active and can be used to create instances
+	WorkflowDefinitionStatusActive WorkflowDefinitionStatus = "active"
+	// WorkflowDefinitionStatusInactive indicates the workflow definition is inactive and cannot be used
+	WorkflowDefinitionStatusInactive WorkflowDefinitionStatus = "inactive"
+	// WorkflowDefinitionStatusDeprecated indicates the workflow definition is deprecated and should not be used
 	WorkflowDefinitionStatusDeprecated WorkflowDefinitionStatus = "deprecated"
 )
 
@@ -49,7 +53,7 @@ type WorkflowDefinition struct {
 	Configuration  WorkflowConfiguration      `json:"configuration"`
 }
 
-// WorkflowConfiguration contains configuration for workflow execution
+// WorkflowConfiguration contains configuration settings for a workflow
 type WorkflowConfiguration struct {
 	MaxConcurrentInstances int               `json:"max_concurrent_instances"`
 	DefaultTimeoutSeconds  int               `json:"default_timeout_seconds"`

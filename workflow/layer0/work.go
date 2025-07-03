@@ -23,22 +23,33 @@ const (
 type WorkStatus string
 
 const (
-	WorkStatusPending   WorkStatus = "pending"
+	// WorkStatusPending indicates the work is waiting to be scheduled or executed
+	WorkStatusPending WorkStatus = "pending"
+	// WorkStatusScheduled indicates the work has been scheduled for execution
 	WorkStatusScheduled WorkStatus = "scheduled"
+	// WorkStatusExecuting indicates the work is currently being executed
 	WorkStatusExecuting WorkStatus = "executing"
+	// WorkStatusCompleted indicates the work has been completed successfully
 	WorkStatusCompleted WorkStatus = "completed"
-	WorkStatusFailed    WorkStatus = "failed"
+	// WorkStatusFailed indicates the work execution has failed
+	WorkStatusFailed WorkStatus = "failed"
+	// WorkStatusCancelled indicates the work has been cancelled before completion
 	WorkStatusCancelled WorkStatus = "cancelled"
-	WorkStatusRetrying  WorkStatus = "retrying"
+	// WorkStatusRetrying indicates the work is being retried after a failure
+	WorkStatusRetrying WorkStatus = "retrying"
 )
 
 // WorkPriority defines the priority level of work
 type WorkPriority int
 
 const (
-	WorkPriorityLow      WorkPriority = 1
-	WorkPriorityNormal   WorkPriority = 5
-	WorkPriorityHigh     WorkPriority = 10
+	// WorkPriorityLow represents the lowest priority level for work execution
+	WorkPriorityLow WorkPriority = 1
+	// WorkPriorityNormal represents the standard priority level for work execution
+	WorkPriorityNormal WorkPriority = 5
+	// WorkPriorityHigh represents a high priority level for work execution
+	WorkPriorityHigh WorkPriority = 10
+	// WorkPriorityCritical represents the highest priority level for urgent work execution
 	WorkPriorityCritical WorkPriority = 15
 )
 

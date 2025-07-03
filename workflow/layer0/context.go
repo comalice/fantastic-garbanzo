@@ -13,10 +13,14 @@ type ContextID string
 type ContextScope string
 
 const (
-	ContextScopeGlobal   ContextScope = "global"
+	// ContextScopeGlobal represents a context that is available across the entire workflow system
+	ContextScopeGlobal ContextScope = "global"
+	// ContextScopeWorkflow represents a context that is scoped to a specific workflow instance
 	ContextScopeWorkflow ContextScope = "workflow"
-	ContextScopeState    ContextScope = "state"
-	ContextScopeWork     ContextScope = "work"
+	// ContextScopeState represents a context that is scoped to a specific state
+	ContextScopeState ContextScope = "state"
+	// ContextScopeWork represents a context that is scoped to a specific work item
+	ContextScopeWork ContextScope = "work"
 )
 
 // ContextMetadata contains metadata about a context

@@ -12,30 +12,43 @@ type ConditionID string
 type ConditionType string
 
 const (
+	// ConditionTypeExpression represents a condition that evaluates a logical expression
 	ConditionTypeExpression ConditionType = "expression"
-	ConditionTypeScript     ConditionType = "script"
-	ConditionTypeService    ConditionType = "service"
-	ConditionTypeTime       ConditionType = "time"
-	ConditionTypeEvent      ConditionType = "event"
+	// ConditionTypeScript represents a condition that executes a script to determine the result
+	ConditionTypeScript ConditionType = "script"
+	// ConditionTypeService represents a condition that calls an external service for evaluation
+	ConditionTypeService ConditionType = "service"
+	// ConditionTypeTime represents a condition based on time constraints or schedules
+	ConditionTypeTime ConditionType = "time"
+	// ConditionTypeEvent represents a condition that waits for specific events to occur
+	ConditionTypeEvent ConditionType = "event"
 )
 
 // ConditionStatus represents the current status of a condition
 type ConditionStatus string
 
 const (
-	ConditionStatusPending    ConditionStatus = "pending"
+	// ConditionStatusPending indicates the condition is waiting to be evaluated
+	ConditionStatusPending ConditionStatus = "pending"
+	// ConditionStatusEvaluating indicates the condition is currently being evaluated
 	ConditionStatusEvaluating ConditionStatus = "evaluating"
-	ConditionStatusTrue       ConditionStatus = "true"
-	ConditionStatusFalse      ConditionStatus = "false"
-	ConditionStatusError      ConditionStatus = "error"
+	// ConditionStatusTrue indicates the condition has been evaluated and is true
+	ConditionStatusTrue ConditionStatus = "true"
+	// ConditionStatusFalse indicates the condition has been evaluated and is false
+	ConditionStatusFalse ConditionStatus = "false"
+	// ConditionStatusError indicates an error occurred during condition evaluation
+	ConditionStatusError ConditionStatus = "error"
 )
 
 // ConditionOperator defines logical operators for combining conditions
 type ConditionOperator string
 
 const (
+	// ConditionOperatorAnd represents a logical AND operation between conditions
 	ConditionOperatorAnd ConditionOperator = "and"
-	ConditionOperatorOr  ConditionOperator = "or"
+	// ConditionOperatorOr represents a logical OR operation between conditions
+	ConditionOperatorOr ConditionOperator = "or"
+	// ConditionOperatorNot represents a logical NOT operation on a condition
 	ConditionOperatorNot ConditionOperator = "not"
 )
 
